@@ -24,6 +24,7 @@ use embassy_time::{Delay, Timer, Instant};
 //use rand_core::RngCore;
 use static_cell::StaticCell;
 use {defmt_rtt as _, panic_probe as _};
+use embassy_stm32::flash::{Flash};
 
 
 // Ethernet
