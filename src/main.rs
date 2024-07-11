@@ -419,6 +419,19 @@ async fn main(spawner: Spawner) {
                     }
                 )
             )
+            // create a route that matched /cmd and takes GET request and reports the query string
+            .route(
+                "/cmd",
+                get(|State(shared_control): State<AppControl>| async move {
+                    picoserve::response::Json(
+                        ( "cmd", "GET" )
+                    )
+                }).post(|State(shared_control): State<AppControl>, picoserve::extract::Form(PostFormBoolState { state })| async move {
+                    picoserve::response::Json(
+                        ( "cmd", "POST" )
+                    )
+                })
+            )
     }
 
     let app = make_static!(make_app());
