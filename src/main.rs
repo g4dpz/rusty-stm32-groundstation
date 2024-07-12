@@ -419,7 +419,6 @@ async fn main(spawner: Spawner) {
                     }
                 )
             )
-            // create a route that matched /cmd and takes GET request and reports the query string
             .route(
                 "/cmd",
                 get(|State(shared_control): State<AppControl>| async move {
@@ -429,6 +428,30 @@ async fn main(spawner: Spawner) {
                 }).post(|State(shared_control): State<AppControl>, picoserve::extract::Form(PostFormBoolState { state })| async move {
                     picoserve::response::Json(
                         ( "cmd", "POST" )
+                    )
+                })
+            )
+            .route(
+                "/track",
+                get(|State(shared_control): State<AppControl>| async move {
+                    picoserve::response::Json(
+                        ( "track", "GET" )
+                    )
+                }).post(|State(shared_control): State<AppControl>, picoserve::extract::Form(PostFormBoolState { state })| async move {
+                    picoserve::response::Json(
+                        ( "track", "POST" )
+                    )
+                })
+            )
+            .route(
+                "/viewtle",
+                get(|State(shared_control): State<AppControl>| async move {
+                    picoserve::response::Json(
+                        ( "track", "GET" )
+                    )
+                }).post(|State(shared_control): State<AppControl>, picoserve::extract::Form(PostFormBoolState { state })| async move {
+                    picoserve::response::Json(
+                        ( "track", "POST" )
                     )
                 })
             )
