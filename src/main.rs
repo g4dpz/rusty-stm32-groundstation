@@ -60,6 +60,9 @@ use chrono::{NaiveDate, NaiveDateTime};
 // NTP
 mod sntp;
 
+mod tracker;
+use tracker::track::{track};
+
 
 // GPIO
 use core::sync::atomic::{ AtomicU16, Ordering };
@@ -434,6 +437,7 @@ async fn main(spawner: Spawner) {
             .route(
                 "/track",
                 get(|State(shared_control): State<AppControl>| async move {
+                    tracker::track::track(false);
                     picoserve::response::Json(
                         ( "track", "GET" )
                     )
