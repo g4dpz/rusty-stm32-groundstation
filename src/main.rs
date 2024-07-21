@@ -50,6 +50,11 @@ struct PostFormBoolState {
     state: heapless::String<16>,
 }
 
+#[derive(serde::Deserialize)]
+struct CommandQuery {
+    a: heapless::String<64>,
+}
+
 
 // Time
 use embassy_stm32::rtc::{Rtc, RtcConfig};
@@ -61,7 +66,10 @@ use chrono::{NaiveDate, NaiveDateTime};
 mod sntp;
 
 mod tracker;
-use tracker::track::{track};
+use tracker::track::track;
+
+mod commander;
+use commander::command_handler::parse;
 
 
 // GPIO
@@ -424,7 +432,8 @@ async fn main(spawner: Spawner) {
             )
             .route(
                 "/cmd",
-                get(|State(shared_control): State<AppControl>| async move {
+                get(|State(shared_control): State<AppControl>, picoserve::extract::Query(CommandQuery {a})| async move {
+                    parse(a);
                     picoserve::response::Json(
                         ( "cmd", "GET" )
                     )
@@ -437,7 +446,7 @@ async fn main(spawner: Spawner) {
             .route(
                 "/track",
                 get(|State(shared_control): State<AppControl>| async move {
-                    tracker::track::track(false);
+                    track(false);
                     picoserve::response::Json(
                         ( "track", "GET" )
                     )
