@@ -42,7 +42,7 @@ use embassy_time::Duration;
 //use embassy_sync::{blocking_mutex::raw::CriticalSectionRawMutex, mutex::Mutex};
 use picoserve::{
     //response::DebugValue,
-    routing::{ get }, //parse_path_segment
+    routing::{ get, get_service }, //parse_path_segment
 };
 
 #[derive(serde::Deserialize)]
@@ -353,7 +353,7 @@ async fn main(spawner: Spawner) {
         picoserve::Router::new()
             .route(
                 "/",
-                get(|| picoserve::response::File::with_content_type_and_headers(
+                get_service(picoserve::response::File::with_content_type_and_headers(
                     "text/html; charset=utf-8",
                     include_bytes!("htdist/index.html.gz"),
                     &[("Content-Encoding", "gzip")],
@@ -361,7 +361,7 @@ async fn main(spawner: Spawner) {
             )
             .route(
                 "/index.css",
-                get(|| picoserve::response::File::with_content_type_and_headers(
+                get_service(picoserve::response::File::with_content_type_and_headers(
                     "text/css; charset=utf-8",
                     include_bytes!("htdist/index.css.gz"),
                     &[("Content-Encoding", "gzip")],
@@ -369,7 +369,7 @@ async fn main(spawner: Spawner) {
             )
             .route(
                 "/index.js",
-                get(|| picoserve::response::File::with_content_type_and_headers(
+                get_service(picoserve::response::File::with_content_type_and_headers(
                     "application/javascript; charset=utf-8",
                     include_bytes!("htdist/index.js.gz"),
                     &[("Content-Encoding", "gzip")],
@@ -377,7 +377,7 @@ async fn main(spawner: Spawner) {
             )
             .route(
                 "/mithril-2.2.2.min.js",
-                get(|| picoserve::response::File::with_content_type_and_headers(
+                get_service(picoserve::response::File::with_content_type_and_headers(
                     "application/javascript; charset=utf-8",
                     include_bytes!("htdist/mithril-2.2.2.min.js.gz"),
                     &[("Content-Encoding", "gzip")],
